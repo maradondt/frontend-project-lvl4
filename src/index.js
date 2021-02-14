@@ -4,12 +4,14 @@ import 'regenerator-runtime/runtime';
 
 import '../assets/application.scss';
 
+import { Provider } from 'react-redux';
 import gon from 'gon';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 import UserNameContext from './UserNameContext';
 import getUserName from './getUserName';
+import store from './store';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
@@ -17,9 +19,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 const container = document.querySelector('#chat');
 ReactDOM.render(
-  <UserNameContext.Provider value={getUserName()}>
-    <App gon={gon} />
-  </UserNameContext.Provider>,
+  <Provider store={store}>
+    <UserNameContext.Provider value={getUserName()}>
+      <App gon={gon} />
+    </UserNameContext.Provider>
+  </Provider>,
   container,
 );
 

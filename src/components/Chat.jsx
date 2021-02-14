@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Channels from './Channels';
-import Messages from './Messages';
-import SubmitForm from './SubmitForm';
+import Messages from './Messages/Messages';
+import SubmitForm from './Messages/SubmitForm';
 
 export default function Chat(props) {
   const { channels } = props;

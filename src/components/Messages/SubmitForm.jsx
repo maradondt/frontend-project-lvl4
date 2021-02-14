@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
+import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
-import UserNameContext from '../UserNameContext';
+import { uniqueId } from 'lodash';
+import UserNameContext from '../../UserNameContext';
+import { addMessage } from './MessagesSlice';
 
-export default function SubmitForm() {
+const mapDispatch = { addMessage };
+const SubmitForm = (props) => {
+  // eslint-disable-next-line no-shadow
+  const { addMessage } = props;
   const userName = useContext(UserNameContext);
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log(userName);
-  // };
   const formik = useFormik({
     initialValues: {
       message: '',
@@ -16,6 +18,7 @@ export default function SubmitForm() {
     onSubmit: (values, { resetForm }) => {
       const { message } = values;
       console.log(JSON.stringify({ message, userName }, null, 2));
+      addMessage({ message: { text: message, userName, id: uniqueId() } });
       resetForm(values);
     },
   });
@@ -36,4 +39,6 @@ export default function SubmitForm() {
       </Form.Group>
     </Form>
   );
-}
+};
+
+export default connect(null, mapDispatch)(SubmitForm);
