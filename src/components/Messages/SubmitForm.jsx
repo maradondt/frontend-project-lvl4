@@ -2,14 +2,23 @@ import React, { useContext } from 'react';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
-// import { uniqueId } from 'lodash';
+import cn from 'classnames';
 import UserNameContext from '../../UserNameContext';
 import { postMessage } from './MessagesSlice';
 
 const mapDispatch = { postMessage };
+const mapStateToProps = ({ messages: { processState, errors } }) => {
+  const props = {
+    processState,
+    errors,
+  };
+  return props;
+};
+
 const SubmitForm = (props) => {
   // eslint-disable-next-line no-shadow
-  const { postMessage } = props;
+  const { postMessage, errors, processState } = props;
+  const channelId = 1;
   const userName = useContext(UserNameContext);
   const formik = useFormik({
     initialValues: {
@@ -17,10 +26,15 @@ const SubmitForm = (props) => {
     },
     onSubmit: async (values, { resetForm }) => {
       const { message } = values;
-      await postMessage({ text: message, userName });
+      await postMessage({ message: { text: message, userName }, channelId });
       resetForm(values);
     },
   });
+  const classesInput = cn('mr-2', {
+    'is-invalid': processState === 'rejected',
+  });
+
+  const renderErrors = () => errors.map((e) => <>{e}</>);
 
   return (
     <Form onSubmit={formik.handleSubmit}>
@@ -32,12 +46,17 @@ const SubmitForm = (props) => {
           value={formik.values.message}
           type="text"
           placeholder="Enter message"
-          className="mr-2"
+          className={classesInput}
+          readOnly={processState === 'pending'}
+          // isInvalid={processState === 'rejected'}
         />
-        <Button variant="primary" type="submit">Submit</Button>
+        <Button disabled={processState === 'pending'} variant="primary" type="submit">Submit</Button>
       </Form.Group>
+      <div className="d-block invalid-feedback">
+        {renderErrors()}
+      </div>
     </Form>
   );
 };
 
-export default connect(null, mapDispatch)(SubmitForm);
+export default connect(mapStateToProps, mapDispatch)(SubmitForm);

@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import axios from 'axios';
 import routes from '../routes';
 
@@ -11,7 +10,19 @@ export const postMessage = async (message, channelId) => {
     );
     return response.data.data;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
+    throw new Error(e);
+  }
+};
+
+export const getMessages = async (channelId) => {
+  try {
+    const response = await axios.get(
+      routes.channelMessagesPath(channelId),
+    );
+    return response.data;
+  } catch (e) {
+    // console.log(e);
     throw new Error(e);
   }
 };
