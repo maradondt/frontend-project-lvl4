@@ -6,9 +6,8 @@ const mapStateToProps = (state) => {
   const { messages } = state;
   return { messages };
 };
-
 const Messages = (props) => {
-  const { messages } = props;
+  const { messages, id } = props;
   const renderMessages = (arr) => arr.map(({ userName, text, id }) => (
     <div key={id}>
       <p>
@@ -16,7 +15,7 @@ const Messages = (props) => {
       </p>
     </div>
   ));
-  return <div>{renderMessages(messages)}</div>;
+  return <div id={id} className="overflow-auto">{renderMessages(messages)}</div>;
 };
 
 export default connect(mapStateToProps)(Messages);

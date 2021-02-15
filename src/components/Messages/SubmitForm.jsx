@@ -2,23 +2,22 @@ import React, { useContext } from 'react';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
-import { uniqueId } from 'lodash';
+// import { uniqueId } from 'lodash';
 import UserNameContext from '../../UserNameContext';
-import { addMessage } from './MessagesSlice';
+import { postMessage } from './MessagesSlice';
 
-const mapDispatch = { addMessage };
+const mapDispatch = { postMessage };
 const SubmitForm = (props) => {
   // eslint-disable-next-line no-shadow
-  const { addMessage } = props;
+  const { postMessage } = props;
   const userName = useContext(UserNameContext);
   const formik = useFormik({
     initialValues: {
       message: '',
     },
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       const { message } = values;
-      console.log(JSON.stringify({ message, userName }, null, 2));
-      addMessage({ message: { text: message, userName, id: uniqueId() } });
+      await postMessage({ text: message, userName });
       resetForm(values);
     },
   });

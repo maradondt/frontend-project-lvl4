@@ -12,7 +12,7 @@ export default function Chat(props) {
         <Channels channels={channels} />
       </Col>
       <Col className="h-100 d-flex flex-column">
-        <Messages />
+        <Messages id="messages" />
         <div className="mt-auto">
           <SubmitForm />
         </div>

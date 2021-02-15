@@ -1,7 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import gon from 'gon';
+import * as chatAPI from '../../utils/chatAPI';
 
 const initialState = gon.messages;
+
+export const postMessage = createAsyncThunk(
+  'messages/post',
+  async (message) => {
+    const response = await chatAPI.postMessage(message, 1);
+    return response;
+  },
+);
 
 const messagesSlice = createSlice({
   name: 'messages',
@@ -10,6 +19,9 @@ const messagesSlice = createSlice({
     addMessage(state, { payload: { message } }) {
       return [...state, message];
     },
+  },
+  extraReducers: {
+    [postMessage.fulfilled]: (state, { payload: { attributes } }) => [...state, attributes],
   },
 });
 

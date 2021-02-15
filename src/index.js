@@ -27,5 +27,6 @@ ReactDOM.render(
   container,
 );
 
-console.log('it works!');
+// axios.get(routes.channelMessagesPath()).then(console.log);
+
 console.log('gon', gon);
