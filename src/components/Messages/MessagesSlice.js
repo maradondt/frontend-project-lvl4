@@ -10,9 +10,20 @@ const initialState = {
 
 export const postMessage = createAsyncThunk(
   'messages/post',
-  async ({ message, channelId }, { rejectWithValue }) => {
+  async ({ message, currentChannelId }, { rejectWithValue }) => {
     try {
-      const response = await chatAPI.postMessage(message, channelId);
+      const response = await chatAPI.postMessage(message, currentChannelId);
+      return response;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  },
+);
+export const getMessages = createAsyncThunk(
+  'messages/post',
+  async (currentChannelId, { rejectWithValue }) => {
+    try {
+      const response = await chatAPI.getMessages(currentChannelId);
       return response;
     } catch (e) {
       return rejectWithValue(e.message);
@@ -32,7 +43,6 @@ const messagesSlice = createSlice({
   },
   extraReducers: {
     [postMessage.fulfilled]: (state) => ({
-      // data: [...state.data, attributes],
       ...state,
       processState: 'idle',
       errors: [],

@@ -1,16 +1,26 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
-const mapStateToProps = ({ messages: { data } }) => {
-  const props = {
-    messages: data,
-  };
-  return props;
-};
+// const mapStateToProps = ({ messages: { data } }) => {
+//   const props = {
+//     messages: data,
+//   };
+//   return props;
+// };
 
-const Messages = (props) => {
-  const { messages } = props;
+const Messages = () => {
+  const selectedMessages = useSelector((state) => {
+    const {
+      messages: {
+        data,
+      },
+      channels: {
+        currentChannelId,
+      },
+    } = state;
+    return data.filter(({ channelId }) => channelId === currentChannelId);
+  });
 
   // eslint-disable-next-line no-shadow
   const renderMessages = (arr) => arr.map(({ userName, text, id }) => (
@@ -18,7 +28,7 @@ const Messages = (props) => {
       <b>{userName}:</b> {text}
     </div>
   ));
-  return <div className="overflow-auto">{renderMessages(messages)}</div>;
+  return <div className="overflow-auto">{renderMessages(selectedMessages)}</div>;
 };
 
-export default connect(mapStateToProps)(Messages);
+export default connect(null)(Messages);

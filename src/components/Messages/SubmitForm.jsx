@@ -7,18 +7,32 @@ import UserNameContext from '../../UserNameContext';
 import { postMessage } from './MessagesSlice';
 
 const mapDispatch = { postMessage };
-const mapStateToProps = ({ messages: { processState, errors } }) => {
+const mapStateToProps = ({
+  messages: {
+    processState,
+    errors,
+  },
+  channels: {
+    currentChannelId,
+  },
+}) => {
   const props = {
     processState,
     errors,
+    currentChannelId,
   };
   return props;
 };
 
 const SubmitForm = (props) => {
-  // eslint-disable-next-line no-shadow
-  const { postMessage, errors, processState } = props;
-  const channelId = 1;
+  const {
+    // eslint-disable-next-line no-shadow
+    postMessage,
+    errors,
+    processState,
+    currentChannelId,
+  } = props;
+
   const userName = useContext(UserNameContext);
   const formik = useFormik({
     initialValues: {
@@ -26,7 +40,7 @@ const SubmitForm = (props) => {
     },
     onSubmit: async (values, { resetForm }) => {
       const { message } = values;
-      await postMessage({ message: { text: message, userName }, channelId });
+      await postMessage({ message: { text: message, userName }, currentChannelId });
       resetForm(values);
     },
   });
@@ -48,7 +62,6 @@ const SubmitForm = (props) => {
           placeholder="Enter message"
           className={classesInput}
           readOnly={processState === 'pending'}
-          // isInvalid={processState === 'rejected'}
         />
         <Button disabled={processState === 'pending'} variant="primary" type="submit">Submit</Button>
       </Form.Group>

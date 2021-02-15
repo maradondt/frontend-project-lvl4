@@ -9,18 +9,16 @@ const actions = {
 };
 
 const App = (props) => {
-  const { gon: { channels }, addMessageAction } = props;
+  const { addMessageAction } = props;
   // const channelId = 1;
   useEffect(() => {
     const socket = io('/');
     socket.on('newMessage', (data) => {
-      console.log('socket');
-      console.log(data.data);
       addMessageAction(data.data);
     });
   });
 
-  return <Chat channels={channels} />;
+  return <Chat />;
 };
 
 export default connect(null, actions)(App);

@@ -1,15 +1,14 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
-import Channels from './Channels';
+import Channels from './Channels/Channels';
 import Messages from './Messages/Messages';
 import SubmitForm from './Messages/SubmitForm';
 
-export default function Chat(props) {
-  const { channels } = props;
+export default function Chat() {
   return (
     <Row className="h-100">
       <Col xs={3} className="border-right">
-        <Channels channels={channels} />
+        <Channels />
       </Col>
       <Col className="h-100 d-flex flex-column">
         <Messages id="messages" />

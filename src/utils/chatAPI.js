@@ -10,7 +10,6 @@ export const postMessage = async (message, channelId) => {
     );
     return response.data.data;
   } catch (e) {
-    // console.log(e);
     throw new Error(e);
   }
 };
@@ -22,7 +21,6 @@ export const getMessages = async (channelId) => {
     );
     return response.data;
   } catch (e) {
-    // console.log(e);
     throw new Error(e);
   }
 };
