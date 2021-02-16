@@ -24,3 +24,17 @@ export const getMessages = async (channelId) => {
     throw new Error(e);
   }
 };
+
+export const postChannel = async (name) => {
+  const attributes = { name };
+  try {
+    const response = await axios.post(
+      routes.channelsPath(),
+      { data: { attributes } },
+    );
+    // console.log(response);
+    return response.data.data;
+  } catch (e) {
+    throw new Error(e);
+  }
+};

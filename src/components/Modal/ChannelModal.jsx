@@ -1,38 +1,46 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Modal, Button } from 'react-bootstrap';
+// import { Modal, Button } from 'react-bootstrap';
 import { actionsModal } from './modalSlice';
+import AddModal from './AddModal';
+import { addChannelAction } from '../Channels/channelsSlice';
 
 const mapStateToProps = ({ modal }) => ({
   modal,
 });
 
 const actionCreators = {
-  toggleModal: actionsModal.toggleModal,
+  closeModal: actionsModal.closeModal,
+  addChannel: addChannelAction,
 };
 
 const ChannelModal = (props) => {
-  const { modal: { isOpened }, toggleModal } = props;
+  const {
+    modal: {
+      isOpened,
+      type,
+      extra,
+    },
+    closeModal,
+    addChannel,
+  } = props;
+
   const handleClose = () => {
-    toggleModal();
+    closeModal();
+  };
+  const dispatchModal = {
+    addChannel: (e) => (
+      <AddModal
+        action={addChannel}
+        handleClose={handleClose}
+        isOpened={isOpened}
+        extra={e}
+      />
+    ),
+    null: () => (<></>),
   };
 
-  return (
-    <Modal show={isOpened} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>Woohoo, reading this text in a modal!</Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleClose}>
-          Save Changes
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
+  return <>{dispatchModal[type](extra)}</>;
 };
 
 export default connect(mapStateToProps, actionCreators)(ChannelModal);

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { addChannelAction } from '../Channels/channelsSlice';
 
 const initialState = {
   isOpened: false,
@@ -10,9 +11,20 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    toggleModal: (state) => ({
+    openModal: (state, { payload: { type } }) => ({
       ...state,
-      isOpened: !state.isOpened,
+      type,
+      isOpened: true,
+    }),
+    closeModal: (state) => ({
+      ...state,
+      isOpened: false,
+    }),
+  },
+  extraReducers: {
+    [addChannelAction.fulfilled]: (state) => ({
+      ...state,
+      isOpened: false,
     }),
   },
 });

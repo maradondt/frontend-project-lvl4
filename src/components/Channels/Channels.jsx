@@ -8,17 +8,17 @@ const mapStateToProps = ({ channels }) => ({ channels });
 
 const actionCreators = {
   changeChannel: actionsChannels.changeChannel,
-  toggleModal: actionsModal.toggleModal,
+  openModal: actionsModal.openModal,
 };
 
 const Channels = (props) => {
   // eslint-disable-next-line no-shadow
-  const { channels: { data, currentChannelId }, changeChannel, toggleModal } = props;
+  const { channels: { data, currentChannelId }, changeChannel, openModal } = props;
   const handleChangeChannel = (id) => () => {
     changeChannel({ id });
   };
   const handleAddChannel = () => {
-    toggleModal();
+    openModal({ type: 'addChannel' });
   };
   return (
     <>
