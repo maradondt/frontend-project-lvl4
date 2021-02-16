@@ -2,11 +2,23 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import gon from 'gon';
 import * as chatAPI from '../../utils/chatAPI';
 
-export const addChannelAction = createAsyncThunk(
+export const addChannelThunk = createAsyncThunk(
   'channels/addChannel',
   async (name, { rejectWithValue }) => {
     try {
       const response = await chatAPI.postChannel(name);
+      return response;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  },
+);
+
+export const removeChannelThunk = createAsyncThunk(
+  'channels/removeChannel',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await chatAPI.deleteChannel(id);
       return response;
     } catch (e) {
       return rejectWithValue(e.message);
@@ -33,14 +45,38 @@ const channelsSlice = createSlice({
       ...state,
       data: [...state.data, attributes],
     }),
+    removeChannel: (state, { payload: { id } }) => ({
+      ...state,
+      data: [...state.data.filter((c) => c.id !== id)],
+      currentChannelId: 1,
+    }),
   },
   extraReducers: {
-    [addChannelAction.fulfilled]: (state) => ({
+    [addChannelThunk.fulfilled]: (state) => ({
       ...state,
       // data: [...state.data, attributes],
       processState: 'idle',
     }),
-    [addChannelAction.rejected]: (state, { payload }) => ({
+    [addChannelThunk.rejected]: (state, { payload }) => ({
+      ...state,
+      errors: [...state.errors, payload],
+      processState: 'failed',
+    }),
+    [addChannelThunk.pending]: (state) => ({
+      ...state,
+      processState: 'pending',
+      errors: [],
+    }),
+    [removeChannelThunk.fulfilled]: (state) => ({
+      ...state,
+      processState: 'idle',
+    }),
+    [removeChannelThunk.pending]: (state) => ({
+      ...state,
+      processState: 'pending',
+      errors: [],
+    }),
+    [removeChannelThunk.rejected]: (state, { payload }) => ({
       ...state,
       errors: [...state.errors, payload],
       processState: 'failed',
@@ -48,5 +84,5 @@ const channelsSlice = createSlice({
   },
 });
 
-export const { changeChannel, addChannel } = channelsSlice.actions;
+export const { changeChannel, addChannel, removeChannel } = channelsSlice.actions;
 export default channelsSlice.reducer;

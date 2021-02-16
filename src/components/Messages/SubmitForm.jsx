@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
@@ -33,6 +33,7 @@ const SubmitForm = (props) => {
     currentChannelId,
   } = props;
 
+  const inputElem = useRef(null);
   const userName = useContext(UserNameContext);
   const formik = useFormik({
     initialValues: {
@@ -48,12 +49,19 @@ const SubmitForm = (props) => {
     'is-invalid': processState === 'rejected',
   });
 
+  useEffect(() => {
+    if (inputElem.current) {
+      inputElem.current.focus();
+    }
+  });
+
   const renderErrors = () => errors.map((e) => <>{e}</>);
 
   return (
     <Form onSubmit={formik.handleSubmit}>
       <Form.Group className="d-flex justify-content-between">
         <Form.Control
+          ref={inputElem}
           onChange={formik.handleChange}
           id="message"
           name="message"

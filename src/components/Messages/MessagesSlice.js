@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import gon from 'gon';
 import * as chatAPI from '../../utils/chatAPI';
+import { removeChannel } from '../Channels/channelsSlice';
 
 const initialState = {
   data: gon.messages,
@@ -55,6 +56,10 @@ const messagesSlice = createSlice({
     [postMessage.pending]: (state) => ({
       ...state,
       processState: 'pending',
+    }),
+    [removeChannel]: (state, { payload: { id } }) => ({
+      ...state,
+      data: [...state.data.filter((m) => m.channelId !== id)],
     }),
   },
 });

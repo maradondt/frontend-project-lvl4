@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect, useSelector } from 'react-redux';
 
 // const mapStateToProps = ({ messages: { data } }) => {
@@ -10,6 +10,7 @@ import { connect, useSelector } from 'react-redux';
 // };
 
 const Messages = () => {
+  const messagesRef = useRef(null);
   const selectedMessages = useSelector((state) => {
     const {
       messages: {
@@ -28,7 +29,11 @@ const Messages = () => {
       <b>{userName}:</b> {text}
     </div>
   ));
-  return <div className="overflow-auto">{renderMessages(selectedMessages)}</div>;
+  useEffect(() => {
+    messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+  });
+
+  return <div ref={messagesRef} className="overflow-auto">{renderMessages(selectedMessages)}</div>;
 };
 
 export default connect(null)(Messages);

@@ -32,8 +32,18 @@ export const postChannel = async (name) => {
       routes.channelsPath(),
       { data: { attributes } },
     );
-    // console.log(response);
     return response.data.data;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const deleteChannel = async (id) => {
+  try {
+    const response = await axios.delete(
+      routes.channelPath(id),
+    );
+    return response.data;
   } catch (e) {
     throw new Error(e);
   }
