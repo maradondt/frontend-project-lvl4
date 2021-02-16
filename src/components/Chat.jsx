@@ -3,6 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import Channels from './Channels/Channels';
 import Messages from './Messages/Messages';
 import SubmitForm from './Messages/SubmitForm';
+import ChannelModal from './Modal/ChannelModal';
 
 export default function Chat() {
   return (
@@ -16,6 +17,7 @@ export default function Chat() {
           <SubmitForm />
         </div>
       </Col>
+      <ChannelModal />
     </Row>
   );
 }
