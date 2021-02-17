@@ -65,7 +65,9 @@ const ChannelModal = (props) => {
         />
       );
     },
-    null: () => (<></>),
+    null() {
+      return (<></>);
+    },
   };
 
   return <>{dispatchModal[type](extra)}</>;
