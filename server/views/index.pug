@@ -4,6 +4,8 @@ html.h-100(lang="en")
     title= "ChatApp"
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(href=assetPath('main.css') rel="stylesheet")
+    script
+      include rollbar.js
     script.
       var gon = !{JSON.stringify(gon)};
   body.d-flex.flex-column.h-100
