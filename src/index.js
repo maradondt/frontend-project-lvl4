@@ -10,7 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 import UserNameContext from './UserNameContext';
-import getUserName from './getUserName';
+import getUserName from './utils/getUserName';
 import store from './store';
 
 if (process.env.NODE_ENV !== 'production') {
