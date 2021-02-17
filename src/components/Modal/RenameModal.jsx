@@ -1,10 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 export default function AddModal(props) {
   const inputElem = useRef();
-  const [inputValue, setInputValue] = useState('');
+  // const [inputValue, setInputValue] = useState('');
   const {
     isOpened,
     handleClose,
@@ -19,14 +21,21 @@ export default function AddModal(props) {
     (state) => state.channels.errors,
   );
 
-  const handleChange = ({ target: { value } }) => {
-    setInputValue(value);
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    action({ name: inputValue, id: extra });
-    setInputValue('');
-  };
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+    },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .max(20, 'Must be 3 to 20 characters')
+        .min(3, 'Must be 3 to 20 characters')
+        .required('Required'),
+    }),
+    onSubmit: (values, { resetForm }) => {
+      action({ name: values.name, id: extra });
+      resetForm(values);
+    },
+  });
 
   const renderErrors = (errors) => errors.map((e) => <>{e}</>);
   useEffect(() => {
@@ -40,10 +49,23 @@ export default function AddModal(props) {
       <Modal.Header closeButton>
         <Modal.Title>Add Chanel</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={formik.handleSubmit}>
         <Modal.Body>
-          <Form.Control readOnly={processStateSelector === 'pending'} ref={inputElem} type="text" onChange={handleChange} />
+          <Form.Control
+            readOnly={processStateSelector === 'pending'}
+            ref={inputElem}
+            type="text"
+            name="name"
+            id="name"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.name}
+            isInvalid={formik.touched.name && formik.errors.name}
+          />
           <div className="d-block invalid-feedback">
+            {formik.touched.name && formik.errors.name ? (
+              <div>{formik.errors.name}</div>
+            ) : null}
             {renderErrors(errorsSelector)}
           </div>
         </Modal.Body>
@@ -51,7 +73,11 @@ export default function AddModal(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button disabled={processStateSelector === 'pending'} type="submit" variant="primary">
+          <Button
+            disabled={processStateSelector === 'pending'}
+            type="submit"
+            variant="primary"
+          >
             Submit
           </Button>
         </Modal.Footer>
