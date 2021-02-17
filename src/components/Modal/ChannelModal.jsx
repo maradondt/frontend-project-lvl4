@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { actionsModal } from './modalSlice';
 import AddModal from './AddModal';
 import RemoveModal from './RemoveModal';
-import { addChannelThunk, removeChannelThunk } from '../Channels/channelsSlice';
+import RenameModal from './RenameModal';
+import { addChannelThunk, removeChannelThunk, renameChannelThunk } from '../Channels/channelsSlice';
 
 const mapStateToProps = ({ modal }) => ({
   modal,
@@ -13,7 +14,8 @@ const mapStateToProps = ({ modal }) => ({
 const actionCreators = {
   closeModal: actionsModal.closeModal,
   addChannel: addChannelThunk,
-  removeModal: removeChannelThunk,
+  removeChannel: removeChannelThunk,
+  renameChannel: renameChannelThunk,
 };
 
 const ChannelModal = (props) => {
@@ -25,7 +27,8 @@ const ChannelModal = (props) => {
     },
     closeModal,
     addChannel,
-    removeModal,
+    removeChannel,
+    renameChannel,
   } = props;
 
   const handleClose = () => {
@@ -42,20 +45,20 @@ const ChannelModal = (props) => {
     ),
     removeChannel: (e) => (
       <RemoveModal
-        action={removeModal}
+        action={removeChannel}
         handleClose={handleClose}
         isOpened={isOpened}
         extra={e}
       />
     ),
-    // renameChannel: (e) => (
-    //   <AddModal
-    //     action={addChannel}
-    //     handleClose={handleClose}
-    //     isOpened={isOpened}
-    //     extra={e}
-    //   />
-    // ),
+    renameChannel: (e) => (
+      <RenameModal
+        action={renameChannel}
+        handleClose={handleClose}
+        isOpened={isOpened}
+        extra={e}
+      />
+    ),
     null: () => (<></>),
   };
 

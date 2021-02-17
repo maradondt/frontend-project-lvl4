@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addChannelThunk, removeChannelThunk } from '../Channels/channelsSlice';
+import { addChannelThunk, removeChannelThunk, renameChannelThunk } from '../Channels/channelsSlice';
 
 const initialState = {
   isOpened: false,
@@ -30,6 +30,12 @@ const modalSlice = createSlice({
       extra: null,
     }),
     [removeChannelThunk.fulfilled]: (state) => ({
+      ...state,
+      isOpened: false,
+      type: null,
+      extra: null,
+    }),
+    [renameChannelThunk.fulfilled]: (state) => ({
       ...state,
       isOpened: false,
       type: null,

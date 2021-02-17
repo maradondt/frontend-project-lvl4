@@ -28,6 +28,9 @@ const Channels = (props) => {
   const handleRemoveChannel = (id) => () => {
     openModal({ type: 'removeChannel', extra: id });
   };
+  const handleRenameChannel = (id) => () => {
+    openModal({ type: 'renameChannel', extra: id });
+  };
   const getButtonVariant = (id) => (id === currentChannelId ? 'primary' : 'light');
   return (
     <>
@@ -48,8 +51,8 @@ const Channels = (props) => {
               </Button>
               <Dropdown.Toggle className="flex-grow-0" split variant={getButtonVariant(id)} />
               <Dropdown.Menu>
-                <Dropdown.Item>Rename</Dropdown.Item>
                 <Dropdown.Item onClick={handleRemoveChannel(id)}>Remove</Dropdown.Item>
+                <Dropdown.Item onClick={handleRenameChannel(id)}>Rename</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           )

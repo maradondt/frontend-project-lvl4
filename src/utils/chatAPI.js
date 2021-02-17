@@ -38,6 +38,19 @@ export const postChannel = async (name) => {
   }
 };
 
+export const patchChannel = async (id, name) => {
+  const attributes = { name };
+  try {
+    const response = await axios.patch(
+      routes.channelPath(id),
+      { data: { attributes } },
+    );
+    return response.data.data;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 export const deleteChannel = async (id) => {
   try {
     const response = await axios.delete(

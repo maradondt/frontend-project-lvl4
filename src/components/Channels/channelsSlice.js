@@ -26,6 +26,18 @@ export const removeChannelThunk = createAsyncThunk(
   },
 );
 
+export const renameChannelThunk = createAsyncThunk(
+  'channels/renameChannel',
+  async ({ name, id }, { rejectWithValue }) => {
+    try {
+      const response = await chatAPI.patchChannel(id, name);
+      return response;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  },
+);
+
 const initialState = {
   data: gon.channels,
   currentChannelId: gon.currentChannelId,
@@ -50,6 +62,16 @@ const channelsSlice = createSlice({
       data: [...state.data.filter((c) => c.id !== id)],
       currentChannelId: 1,
     }),
+    renameChannel: (state, { payload: { attributes } }) => {
+      const channelIndex = state.data.findIndex((c) => c.id === attributes.id);
+      const newChannels = state.data.map((c, i) => (i === channelIndex
+        ? attributes
+        : c));
+      return {
+        ...state,
+        data: newChannels,
+      };
+    },
   },
   extraReducers: {
     [addChannelThunk.fulfilled]: (state) => ({
@@ -81,8 +103,26 @@ const channelsSlice = createSlice({
       errors: [...state.errors, payload],
       processState: 'failed',
     }),
+    [renameChannelThunk.fulfilled]: (state) => ({
+      ...state,
+      processState: 'idle',
+    }),
+    [renameChannelThunk.pending]: (state) => ({
+      ...state,
+      processState: 'pending',
+    }),
+    [renameChannelThunk.rejected]: (state, { payload }) => ({
+      ...state,
+      errors: [...state.errors, payload],
+      processState: 'failed',
+    }),
   },
 });
 
-export const { changeChannel, addChannel, removeChannel } = channelsSlice.actions;
+export const {
+  changeChannel,
+  addChannel,
+  removeChannel,
+  renameChannel,
+} = channelsSlice.actions;
 export default channelsSlice.reducer;
