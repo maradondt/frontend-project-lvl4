@@ -31,7 +31,6 @@ const App = (props) => {
       removeChannelAction(data.data);
     });
     socket.on('renameChannel', (data) => {
-      console.log(data);
       renameChannelAction(data.data);
     });
   });
