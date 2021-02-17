@@ -35,30 +35,36 @@ const ChannelModal = (props) => {
     closeModal();
   };
   const dispatchModal = {
-    addChannel: (e) => (
-      <AddModal
-        action={addChannel}
-        handleClose={handleClose}
-        isOpened={isOpened}
-        extra={e}
-      />
-    ),
-    removeChannel: (e) => (
-      <RemoveModal
-        action={removeChannel}
-        handleClose={handleClose}
-        isOpened={isOpened}
-        extra={e}
-      />
-    ),
-    renameChannel: (e) => (
-      <RenameModal
-        action={renameChannel}
-        handleClose={handleClose}
-        isOpened={isOpened}
-        extra={e}
-      />
-    ),
+    addChannel(e) {
+      return (
+        <AddModal
+          action={addChannel}
+          handleClose={handleClose}
+          isOpened={isOpened}
+          extra={e}
+        />
+      );
+    },
+    removeChannel(e) {
+      return (
+        <RemoveModal
+          action={removeChannel}
+          handleClose={handleClose}
+          isOpened={isOpened}
+          extra={e}
+        />
+      );
+    },
+    renameChannel(e) {
+      return (
+        <RenameModal
+          action={renameChannel}
+          handleClose={handleClose}
+          isOpened={isOpened}
+          extra={e}
+        />
+      );
+    },
     null: () => (<></>),
   };
 
